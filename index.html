@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>17 / 8 / 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6EFE2;
+    --paper-edge:#E9DCC4;
+    --ink:#3B2A20;
+    --ink-soft:#6b5847;
+    --wine:#6E2A3A;
+    --gold:#BE9552;
+    --terminal:#1C2129;
+    --terminal-text:#CFC6B8;
+    --mint:#8FD9B6;
+    --amber:#E3B45C;
+    --font-ar:'Amiri', serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{
+    height:100%;
+    margin:0;
+    background:#12161c;
+    font-family:var(--font-ar);
+    overflow:hidden;
+  }
+
+  body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    position:relative;
+  }
+
+  /* ambient floating hearts */
+  .ambient{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    overflow:hidden;
+    z-index:0;
+  }
+  .heart{
+    position:absolute;
+    bottom:-40px;
+    font-size:14px;
+    color:var(--gold);
+    opacity:0.16;
+    animation:rise linear infinite;
+  }
+  @keyframes rise{
+    to{ transform:translateY(-110vh) translateX(var(--drift,0px)) rotate(20deg); opacity:0; }
+  }
+
+  .app{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:560px;
+    height:min(720px, 92vh);
+    display:flex;
+    flex-direction:column;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 30px 70px -20px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,0,0,0.35);
+  }
+
+  /* fake editor tab bar */
+  .tabbar{
+    background:var(--terminal);
+    color:var(--terminal-text);
+    font-family:var(--font-mono);
+    font-size:12px;
+    padding:10px 16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    letter-spacing:0.02em;
+    direction:ltr;
+    flex-shrink:0;
+  }
+  .tabbar .dots{ display:flex; gap:6px; }
+  .tabbar .dots span{ width:8px; height:8px; border-radius:50%; display:inline-block; }
+  .tabbar .dots span:nth-child(1){ background:var(--wine); }
+  .tabbar .dots span:nth-child(2){ background:var(--amber); }
+  .tabbar .dots span:nth-child(3){ background:var(--mint); }
+  .tabbar .filename{ opacity:0.85; }
+  .tabbar .pageno{ opacity:0.55; }
+
+  /* paper surface */
+  .paper{
+    flex:1;
+    background:
+      repeating-linear-gradient(180deg, transparent 0 38px, rgba(110,42,58,0.05) 39px 40px),
+      var(--paper);
+    position:relative;
+    overflow:hidden;
+    display:flex;
+  }
+  .paper::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:radial-gradient(rgba(59,42,32,0.05) 1px, transparent 1px);
+    background-size:3px 3px;
+    opacity:0.5;
+    pointer-events:none;
+  }
+  .paper::after{
+    content:"";
+    position:absolute;
+    top:0; bottom:0; right:34px;
+    width:1px;
+    background:rgba(110,42,58,0.15);
+  }
+
+  .pages{
+    position:relative;
+    flex:1;
+    padding:38px 30px 30px 22px;
+  }
+
+  .page{
+    position:absolute;
+    inset:0;
+    padding:38px 30px 30px 22px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:14px;
+    opacity:0;
+    transform:translateY(14px);
+    transition:opacity .5s ease, transform .5s ease;
+    pointer-events:none;
+    text-align:center;
+    overflow-y:auto;
+  }
+  .page.active{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+
+  .line{
+    color:var(--ink);
+    font-size:19px;
+    line-height:1.9;
+    margin:0;
+  }
+  .line.soft{ color:var(--ink-soft); font-size:17px; }
+  .spacer{ height:6px; }
+
+  .cover-date{
+    font-family:var(--font-mono);
+    direction:ltr;
+    color:var(--wine);
+    font-size:26px;
+    letter-spacing:0.04em;
+    font-weight:600;
+  }
+  .cover-title{
+    font-size:28px;
+    font-weight:700;
+    color:var(--ink);
+    margin-top:6px;
+  }
+  .cover-sub{
+    font-size:17px;
+    color:var(--ink-soft);
+  }
+  .rule{
+    width:56px;
+    height:2px;
+    background:var(--gold);
+    margin:6px auto;
+    border-radius:2px;
+  }
+
+  /* list-style page */
+  .list-item{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    justify-content:center;
+    font-size:19px;
+    color:var(--ink);
+  }
+  .list-item::before{
+    content:"//";
+    font-family:var(--font-mono);
+    color:var(--gold);
+    font-size:14px;
+  }
+
+  /* scan / terminal card */
+  .scan-card{
+    background:var(--terminal);
+    border-radius:10px;
+    padding:26px 20px;
+    font-family:var(--font-mono);
+    color:var(--terminal-text);
+    direction:ltr;
+    text-align:left;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.05);
+  }
+  .scan-title{
+    font-size:13px;
+    color:var(--ink-soft);
+    opacity:0.8;
+    margin-bottom:14px;
+    direction:rtl;
+    text-align:center;
+    font-family:var(--font-ar);
+    font-size:18px;
+    color:var(--ink);
+  }
+  .scan-label{
+    font-size:13px;
+    color:var(--mint);
+    margin-bottom:10px;
+  }
+  .scan-label .cursor{
+    display:inline-block;
+    width:7px;
+    height:12px;
+    background:var(--mint);
+    margin-inline-start:4px;
+    animation:blink 1s step-start infinite;
+    vertical-align:-1px;
+  }
+  .bar-track{
+    width:100%;
+    height:10px;
+    background:rgba(255,255,255,0.08);
+    border-radius:6px;
+    overflow:hidden;
+    margin:10px 0 12px;
+  }
+  .bar-fill{
+    height:100%;
+    width:0%;
+    border-radius:6px;
+    background:linear-gradient(90deg, var(--amber), var(--mint));
+  }
+  .scan-percent{
+    font-size:30px;
+    font-weight:600;
+    color:var(--amber);
+    text-align:center;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  /* quote page */
+  .quote{
+    font-size:21px;
+    color:var(--wine);
+    font-weight:700;
+    position:relative;
+    padding:0 18px;
+  }
+
+  /* closing heart mark */
+  .mark{
+    font-size:22px;
+    color:var(--gold);
+    margin-top:4px;
+  }
+
+  /* controls */
+  .controls{
+    flex-shrink:0;
+    background:var(--paper);
+    border-top:1px solid var(--paper-edge);
+    padding:14px 18px 18px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .dots-row{
+    display:flex;
+    justify-content:center;
+    gap:7px;
+  }
+  .dot{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:var(--paper-edge);
+    border:1px solid rgba(110,42,58,0.25);
+    cursor:pointer;
+    padding:0;
+    transition:background .25s, transform .25s;
+  }
+  .dot.active{
+    background:var(--wine);
+    transform:scale(1.3);
+    border-color:var(--wine);
+  }
+  .nav-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    font-family:var(--font-mono);
+  }
+  .navbtn{
+    flex:1;
+    padding:11px 14px;
+    border-radius:8px;
+    border:1px solid var(--wine);
+    background:transparent;
+    color:var(--wine);
+    font-family:var(--font-mono);
+    font-size:13px;
+    cursor:pointer;
+    transition:background .2s, color .2s, opacity .2s;
+  }
+  .navbtn:hover:not(:disabled){
+    background:var(--wine);
+    color:var(--paper);
+  }
+  .navbtn:disabled{
+    opacity:0.3;
+    cursor:default;
+  }
+  .navbtn.primary{
+    background:var(--wine);
+    color:var(--paper);
+  }
+  .navbtn.primary:hover{
+    background:#5a2130;
+  }
+
+  @media (max-width:420px){
+    .line{ font-size:17px; }
+    .cover-title{ font-size:24px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .heart{ animation:none; display:none; }
+    .page{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient" id="ambient"></div>
+
+<div class="app">
+  <div class="tabbar">
+    <span class="filename">our_story.txt</span>
+    <div class="dots"><span></span><span></span><span></span></div>
+    <span class="pageno" id="pageno">01 / 10</span>
+  </div>
+
+  <div class="paper">
+    <div class="pages" id="pages"></div>
+  </div>
+
+  <div class="controls">
+    <div class="dots-row" id="dotsRow"></div>
+    <div class="nav-row">
+      <button class="navbtn" id="prevBtn">◀ السابق</button>
+      <button class="navbtn primary" id="nextBtn">التالي ▶</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const pagesData = [
+  { type:'cover', date:'17 / 8 / 2026', title:'بداية حلوة...', sub:'ما كنت مخطط إلها 🤍' },
+
+  { type:'text', lines:[
+      'اليوم مو مجرد تاريخ تعارف...','',
+      'اليوم هو اليوم اللي تعرفت بيه على شخص،',
+      'ومن أول فترة قصيرة حسّيت أكو أشياء هواي بينا تشبه بعض.'
+  ]},
+
+  { type:'list', items:[
+      'نفس الاهتمام،',
+      'نفس حب البرمجة والتطوير،',
+      'نفس الحماس من نحچي عن فكرة جديدة،',
+      'وحتى طريقة التفكير ببعض الأمور قريبة بشكل يخلي الواحد يستغرب شوي 😂'
+  ]},
+
+  { type:'scan', title:'نسبة التشابه بينا؟', percent:95 },
+
+  { type:'text', lines:[
+      'يمكن النسبة مو علمية،','بس الإحساس اللي وراها حقيقي.','',
+      'لأن مرات الإنسان يتعرف على شخص جديد،','وبوقت قصير يحس وكأنه يعرفه من زمان...','',
+      'مو لأنهم عاشوا نفس الأشياء،','بس لأن طريقة تفكيرهم قريبة،',
+      'واهتماماتهم تجمعهم،','والحچي بينهم يكون سهل بدون ما يحتاج الواحد يتصنع.'
+  ]},
+
+  { type:'text', lines:[
+      'وأعتقد هذا أكثر شي عجبني ببدايتنا...','',
+      'إنه لقينا شي مشترك يجمعنا،','مو بس صداقة وحچي،',
+      'إنما حتى الشغف اللي نحبّه،','والأفكار اللي نريد نطورها،',
+      'والمشاريع اللي ممكن بيوم من الأيام نشتغل عليها سوه.'
+  ]},
+
+  { type:'text', lines:[
+      'يمكن اليوم مجرد بداية...','',
+      'بس حبيت أخلي 17/8/2026 محفوظة بمكان صغير،',
+      'لأنها أول صفحة من قصة تعارف أتمنى تكون حلوة،',
+      'وتكبر ويا الوقت بشكل أجمل.'
+  ]},
+
+  { type:'quote', lines:[
+      'ويمكن بعد فترة،','من نشتغل سوه على مشروع ونشوف شكد تطورنا،','نرجع لهذا التاريخ ونكول:'
+  ], quote:'"تتذكرين؟ من هنا بلشت السالفة." 🤍' },
+
+  { type:'text', lines:[
+      'إلى صديقتي الجديدة...','',
+      'ما أعرف شنو راح يصير بعدين،','ولا أريد أستعجل الأشياء...','',
+      'بس أعرف إن وجود شخص يشبهك بهالأشياء','شي حلو يستحق الواحد يحافظ عليه.'
+  ]},
+
+  { type:'closing', lines:[
+      'فخلّي 17/8/2026 تبقى أول تاريخ بمشروعنا...',
+      'مو مشروع برمجي وبس،',
+      'إنما بداية صداقة حلوة يمكن الأيام تكتب إلها أشياء أجمل.'
+  ]}
+];
+
+const pagesEl = document.getElementById('pages');
+const dotsRow = document.getElementById('dotsRow');
+const pagenoEl = document.getElementById('pageno');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+let current = 0;
+
+function buildPage(data, index){
+  const el = document.createElement('div');
+  el.className = 'page';
+  el.dataset.index = index;
+
+  if(data.type === 'cover'){
+    el.innerHTML = `
+      <div class="cover-date">${data.date}</div>
+      <div class="rule"></div>
+      <div class="cover-title">${data.title}</div>
+      <div class="cover-sub">${data.sub}</div>`;
+  } else if(data.type === 'text' || data.type === 'closing'){
+    el.innerHTML = data.lines.map(l => l === ''
+      ? '<div class="spacer"></div>'
+      : `<p class="line">${l}</p>`).join('');
+    if(data.type === 'closing'){
+      el.innerHTML += `<div class="mark">🤍</div>`;
+    }
+  } else if(data.type === 'list'){
+    el.innerHTML = data.items.map(i => `<div class="list-item">${i}</div>`).join('');
+  } else if(data.type === 'scan'){
+    el.innerHTML = `
+      <div class="scan-title">${data.title}</div>
+      <div class="scan-card">
+        <div class="scan-label"><span class="analyzing">جاري التحليل...</span><span class="cursor"></span></div>
+        <div class="bar-track"><div class="bar-fill" id="barFill"></div></div>
+        <div class="scan-percent" id="scanPercent">0%</div>
+      </div>`;
+  } else if(data.type === 'quote'){
+    el.innerHTML = data.lines.map(l => `<p class="line soft">${l}</p>`).join('') +
+      `<p class="quote">${data.quote}</p>`;
+  }
+  return el;
+}
+
+pagesData.forEach((d,i) => pagesEl.appendChild(buildPage(d,i)));
+
+pagesData.forEach((_,i) => {
+  const b = document.createElement('button');
+  b.className = 'dot';
+  b.setAttribute('aria-label', 'الذهاب إلى الصفحة ' + (i+1));
+  b.addEventListener('click', () => goTo(i));
+  dotsRow.appendChild(b);
+});
+
+const pageEls = [...pagesEl.children];
+const dotEls = [...dotsRow.children];
+
+function pad(n){ return String(n).padStart(2,'0'); }
+
+function goTo(index){
+  if(index < 0 || index >= pagesData.length) return;
+  current = index;
+
+  pageEls.forEach((el,i) => el.classList.toggle('active', i === index));
+  dotEls.forEach((el,i) => el.classList.toggle('active', i === index));
+  pagenoEl.textContent = `${pad(index+1)} / ${pagesData.length}`;
+
+  prevBtn.disabled = index === 0;
+  if(index === pagesData.length - 1){
+    nextBtn.textContent = 'من البداية ↺';
+  } else {
+    nextBtn.textContent = 'التالي ▶';
+  }
+
+  if(pagesData[index].type === 'scan'){
+    runScan(pagesData[index].percent);
+  }
+}
+
+function runScan(target){
+  const fill = document.getElementById('barFill');
+  const label = document.getElementById('scanPercent');
+  if(!fill || !label) return;
+  let start = null;
+  const duration = 1400;
+  fill.style.width = '0%';
+  label.textContent = '0%';
+
+  function step(ts){
+    if(!start) start = ts;
+    const progress = Math.min((ts - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const value = Math.round(eased * target);
+    fill.style.width = value + '%';
+    label.textContent = value + '%';
+    if(progress < 1){
+      requestAnimationFrame(step);
+    } else {
+      label.textContent = target + '% 🤍';
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+prevBtn.addEventListener('click', () => goTo(current - 1));
+nextBtn.addEventListener('click', () => {
+  if(current === pagesData.length - 1){ goTo(0); }
+  else { goTo(current + 1); }
+});
+
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'ArrowRight'){
+    if(current === pagesData.length - 1) goTo(0); else goTo(current + 1);
+  } else if(e.key === 'ArrowLeft'){
+    goTo(current - 1);
+  }
+});
+
+// basic touch swipe
+let touchX = null;
+document.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  if(touchX === null) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  if(Math.abs(dx) > 50){
+    if(dx > 0) goTo(current - 1);
+    else { if(current === pagesData.length - 1) goTo(0); else goTo(current + 1); }
+  }
+  touchX = null;
+});
+
+goTo(0);
+
+// ambient hearts
+const ambient = document.getElementById('ambient');
+const heartChars = ['🤍','♥'];
+for(let i=0;i<10;i++){
+  const h = document.createElement('div');
+  h.className = 'heart';
+  h.textContent = heartChars[i % 2];
+  h.style.left = Math.random()*100 + '%';
+  h.style.setProperty('--drift', (Math.random()*60-30) + 'px');
+  h.style.fontSize = (10 + Math.random()*10) + 'px';
+  h.style.animationDuration = (10 + Math.random()*8) + 's';
+  h.style.animationDelay = (Math.random()*10) + 's';
+  ambient.appendChild(h);
+}
+</script>
+</body>
+</html>
