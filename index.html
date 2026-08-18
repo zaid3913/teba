@@ -1,583 +1,1862 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>17 / 8 / 2026</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --paper:#F6EFE2;
-    --paper-edge:#E9DCC4;
-    --ink:#3B2A20;
-    --ink-soft:#6b5847;
-    --wine:#6E2A3A;
-    --gold:#BE9552;
-    --terminal:#1C2129;
-    --terminal-text:#CFC6B8;
-    --mint:#8FD9B6;
-    --amber:#E3B45C;
-    --font-ar:'Amiri', serif;
-    --font-mono:'JetBrains Mono', monospace;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  *{box-sizing:border-box;}
+  <title>Our Little Story 🤍</title>
 
-  html,body{
-    height:100%;
-    margin:0;
-    background:#12161c;
-    font-family:var(--font-ar);
-    overflow:hidden;
-  }
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-  body{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:24px;
-    position:relative;
-  }
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-  /* ambient floating hearts */
-  .ambient{
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    overflow:hidden;
-    z-index:0;
-  }
-  .heart{
-    position:absolute;
-    bottom:-40px;
-    font-size:14px;
-    color:var(--gold);
-    opacity:0.16;
-    animation:rise linear infinite;
-  }
-  @keyframes rise{
-    to{ transform:translateY(-110vh) translateX(var(--drift,0px)) rotate(20deg); opacity:0; }
-  }
+  <style>
+    :root{
+      --paper:#F6EFE2;
+      --paper-edge:#E9DCC4;
+      --ink:#3B2A20;
+      --ink-soft:#6b5847;
+      --wine:#6E2A3A;
+      --gold:#BE9552;
 
-  .app{
-    position:relative;
-    z-index:1;
-    width:100%;
-    max-width:560px;
-    height:min(720px, 92vh);
-    display:flex;
-    flex-direction:column;
-    border-radius:14px;
-    overflow:hidden;
-    box-shadow:0 30px 70px -20px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,0,0,0.35);
-  }
+      --dark:#10141b;
+      --dark2:#171c25;
 
-  /* fake editor tab bar */
-  .tabbar{
-    background:var(--terminal);
-    color:var(--terminal-text);
-    font-family:var(--font-mono);
-    font-size:12px;
-    padding:10px 16px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    letter-spacing:0.02em;
-    direction:ltr;
-    flex-shrink:0;
-  }
-  .tabbar .dots{ display:flex; gap:6px; }
-  .tabbar .dots span{ width:8px; height:8px; border-radius:50%; display:inline-block; }
-  .tabbar .dots span:nth-child(1){ background:var(--wine); }
-  .tabbar .dots span:nth-child(2){ background:var(--amber); }
-  .tabbar .dots span:nth-child(3){ background:var(--mint); }
-  .tabbar .filename{ opacity:0.85; }
-  .tabbar .pageno{ opacity:0.55; }
+      --font-ar:'Amiri',serif;
+      --font-mono:'JetBrains Mono',monospace;
+    }
 
-  /* paper surface */
-  .paper{
-    flex:1;
-    background:
-      repeating-linear-gradient(180deg, transparent 0 38px, rgba(110,42,58,0.05) 39px 40px),
-      var(--paper);
-    position:relative;
-    overflow:hidden;
-    display:flex;
-  }
-  .paper::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background-image:radial-gradient(rgba(59,42,32,0.05) 1px, transparent 1px);
-    background-size:3px 3px;
-    opacity:0.5;
-    pointer-events:none;
-  }
-  .paper::after{
-    content:"";
-    position:absolute;
-    top:0; bottom:0; right:34px;
-    width:1px;
-    background:rgba(110,42,58,0.15);
-  }
+    *{
+      box-sizing:border-box;
+    }
 
-  .pages{
-    position:relative;
-    flex:1;
-    padding:38px 30px 30px 22px;
-  }
+    html{
+      scroll-behavior:smooth;
+    }
 
-  .page{
-    position:absolute;
-    inset:0;
-    padding:38px 30px 30px 22px;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    gap:14px;
-    opacity:0;
-    transform:translateY(14px);
-    transition:opacity .5s ease, transform .5s ease;
-    pointer-events:none;
-    text-align:center;
-    overflow-y:auto;
-  }
-  .page.active{
-    opacity:1;
-    transform:translateY(0);
-    pointer-events:auto;
-  }
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(190,149,82,.10), transparent 25%),
+        radial-gradient(circle at 80% 90%, rgba(110,42,58,.12), transparent 30%),
+        #10141b;
+      color:white;
+      font-family:var(--font-ar);
 
-  .line{
-    color:var(--ink);
-    font-size:19px;
-    line-height:1.9;
-    margin:0;
-  }
-  .line.soft{ color:var(--ink-soft); font-size:17px; }
-  .spacer{ height:6px; }
+      /* الصفحة الرئيسية هي اللي تسوي Scroll */
+      overflow-x:hidden;
+      overflow-y:auto;
+    }
 
-  .cover-date{
-    font-family:var(--font-mono);
-    direction:ltr;
-    color:var(--wine);
-    font-size:26px;
-    letter-spacing:0.04em;
-    font-weight:600;
-  }
-  .cover-title{
-    font-size:28px;
-    font-weight:700;
-    color:var(--ink);
-    margin-top:6px;
-  }
-  .cover-sub{
-    font-size:17px;
-    color:var(--ink-soft);
-  }
-  .rule{
-    width:56px;
-    height:2px;
-    background:var(--gold);
-    margin:6px auto;
-    border-radius:2px;
-  }
+    button{
+      font-family:inherit;
+    }
 
-  /* list-style page */
-  .list-item{
-    display:flex;
-    align-items:baseline;
-    gap:8px;
-    justify-content:center;
-    font-size:19px;
-    color:var(--ink);
-  }
-  .list-item::before{
-    content:"//";
-    font-family:var(--font-mono);
-    color:var(--gold);
-    font-size:14px;
-  }
+    /* ================================
+       FLOATING HEARTS
+    ================================= */
 
-  /* scan / terminal card */
-  .scan-card{
-    background:var(--terminal);
-    border-radius:10px;
-    padding:26px 20px;
-    font-family:var(--font-mono);
-    color:var(--terminal-text);
-    direction:ltr;
-    text-align:left;
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.05);
-  }
-  .scan-title{
-    font-size:13px;
-    color:var(--ink-soft);
-    opacity:0.8;
-    margin-bottom:14px;
-    direction:rtl;
-    text-align:center;
-    font-family:var(--font-ar);
-    font-size:18px;
-    color:var(--ink);
-  }
-  .scan-label{
-    font-size:13px;
-    color:var(--mint);
-    margin-bottom:10px;
-  }
-  .scan-label .cursor{
-    display:inline-block;
-    width:7px;
-    height:12px;
-    background:var(--mint);
-    margin-inline-start:4px;
-    animation:blink 1s step-start infinite;
-    vertical-align:-1px;
-  }
-  .bar-track{
-    width:100%;
-    height:10px;
-    background:rgba(255,255,255,0.08);
-    border-radius:6px;
-    overflow:hidden;
-    margin:10px 0 12px;
-  }
-  .bar-fill{
-    height:100%;
-    width:0%;
-    border-radius:6px;
-    background:linear-gradient(90deg, var(--amber), var(--mint));
-  }
-  .scan-percent{
-    font-size:30px;
-    font-weight:600;
-    color:var(--amber);
-    text-align:center;
-  }
-  @keyframes blink{ 50%{ opacity:0; } }
+    .ambient{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:0;
+    }
 
-  /* quote page */
-  .quote{
-    font-size:21px;
-    color:var(--wine);
-    font-weight:700;
-    position:relative;
-    padding:0 18px;
-  }
+    .heart{
+      position:absolute;
+      bottom:-40px;
+      opacity:.13;
+      animation:rise linear infinite;
+    }
 
-  /* closing heart mark */
-  .mark{
-    font-size:22px;
-    color:var(--gold);
-    margin-top:4px;
-  }
+    @keyframes rise{
+      to{
+        transform:
+          translateY(-115vh)
+          translateX(var(--drift))
+          rotate(20deg);
 
-  /* controls */
-  .controls{
-    flex-shrink:0;
-    background:var(--paper);
-    border-top:1px solid var(--paper-edge);
-    padding:14px 18px 18px;
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-  }
-  .dots-row{
-    display:flex;
-    justify-content:center;
-    gap:7px;
-  }
-  .dot{
-    width:6px;
-    height:6px;
-    border-radius:50%;
-    background:var(--paper-edge);
-    border:1px solid rgba(110,42,58,0.25);
-    cursor:pointer;
-    padding:0;
-    transition:background .25s, transform .25s;
-  }
-  .dot.active{
-    background:var(--wine);
-    transform:scale(1.3);
-    border-color:var(--wine);
-  }
-  .nav-row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    font-family:var(--font-mono);
-  }
-  .navbtn{
-    flex:1;
-    padding:11px 14px;
-    border-radius:8px;
-    border:1px solid var(--wine);
-    background:transparent;
-    color:var(--wine);
-    font-family:var(--font-mono);
-    font-size:13px;
-    cursor:pointer;
-    transition:background .2s, color .2s, opacity .2s;
-  }
-  .navbtn:hover:not(:disabled){
-    background:var(--wine);
-    color:var(--paper);
-  }
-  .navbtn:disabled{
-    opacity:0.3;
-    cursor:default;
-  }
-  .navbtn.primary{
-    background:var(--wine);
-    color:var(--paper);
-  }
-  .navbtn.primary:hover{
-    background:#5a2130;
-  }
+        opacity:0;
+      }
+    }
 
-  @media (max-width:420px){
-    .line{ font-size:17px; }
-    .cover-title{ font-size:24px; }
-  }
+    /* ================================
+       HOME
+    ================================= */
 
-  @media (prefers-reduced-motion: reduce){
-    .heart{ animation:none; display:none; }
-    .page{ transition:none; }
-  }
-</style>
+    #home{
+      position:relative;
+      z-index:1;
+      min-height:100vh;
+      padding:55px 20px 100px;
+    }
+
+    .home-container{
+      width:100%;
+      max-width:900px;
+      margin:auto;
+    }
+
+    .home-title{
+      text-align:center;
+      margin-bottom:55px;
+    }
+
+    .home-title .small{
+      font-family:var(--font-mono);
+      font-size:12px;
+      color:#BE9552;
+      letter-spacing:4px;
+      margin-bottom:15px;
+    }
+
+    .home-title h1{
+      font-size:42px;
+      margin:0;
+      color:#F6EFE2;
+      font-weight:700;
+    }
+
+    .home-title p{
+      color:#9f968b;
+      font-size:18px;
+      margin-top:10px;
+    }
+
+    /* ================================
+       CARDS
+    ================================= */
+
+    .cards{
+      display:flex;
+      flex-direction:column;
+      gap:35px;
+    }
+
+    .story-card{
+      width:100%;
+      max-width:560px;
+      margin:auto;
+      cursor:pointer;
+      position:relative;
+      transition:
+        transform .35s ease,
+        filter .35s ease;
+    }
+
+    .story-card:hover{
+      transform:translateY(-8px);
+    }
+
+    /* ================================
+       CARD ONE
+    ================================= */
+
+    .card-one{
+      background:
+        repeating-linear-gradient(
+          180deg,
+          transparent 0 38px,
+          rgba(110,42,58,.05) 39px 40px
+        ),
+        var(--paper);
+
+      color:var(--ink);
+
+      border-radius:18px;
+      overflow:hidden;
+
+      box-shadow:
+        0 30px 70px rgba(0,0,0,.35),
+        0 0 0 1px rgba(255,255,255,.04);
+    }
+
+    .card-one-top{
+      background:#1C2129;
+      padding:11px 16px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      direction:ltr;
+
+      font-family:var(--font-mono);
+      font-size:11px;
+      color:#CFC6B8;
+    }
+
+    .terminal-dots{
+      display:flex;
+      gap:6px;
+    }
+
+    .terminal-dots span{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      display:block;
+    }
+
+    .terminal-dots span:nth-child(1){
+      background:#6E2A3A;
+    }
+
+    .terminal-dots span:nth-child(2){
+      background:#E3B45C;
+    }
+
+    .terminal-dots span:nth-child(3){
+      background:#8FD9B6;
+    }
+
+    .card-one-body{
+      padding:45px 25px;
+      text-align:center;
+    }
+
+    .card-one-date{
+      font-family:var(--font-mono);
+      color:var(--wine);
+      font-size:25px;
+      font-weight:600;
+    }
+
+    .card-one-line{
+      width:60px;
+      height:2px;
+      background:var(--gold);
+      margin:15px auto;
+      border-radius:10px;
+    }
+
+    .card-one-title{
+      font-size:32px;
+      font-weight:700;
+    }
+
+    .card-one-desc{
+      font-size:17px;
+      color:var(--ink-soft);
+      margin-top:5px;
+    }
+
+    .open-one{
+      display:inline-block;
+      margin-top:25px;
+      padding:10px 25px;
+      border-radius:8px;
+      border:1px solid var(--wine);
+      color:var(--wine);
+      transition:.25s;
+    }
+
+    .story-card:hover .open-one{
+      background:var(--wine);
+      color:var(--paper);
+    }
+
+    /* ================================
+       CARD TWO
+    ================================= */
+
+    .card-two{
+      min-height:310px;
+      border-radius:25px;
+      overflow:hidden;
+
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.08), transparent 25%),
+        radial-gradient(circle at 80% 80%, rgba(255,125,180,.08), transparent 30%),
+        linear-gradient(135deg,#17121c,#241622 55%,#11151d);
+
+      border:1px solid rgba(255,255,255,.08);
+
+      box-shadow:
+        0 30px 80px rgba(0,0,0,.45),
+        inset 0 1px rgba(255,255,255,.05);
+
+      color:white;
+    }
+
+    .card-two::before{
+      content:"";
+      position:absolute;
+      width:180px;
+      height:180px;
+      border-radius:50%;
+      background:rgba(220,105,150,.12);
+      filter:blur(40px);
+      top:-70px;
+      right:-50px;
+    }
+
+    .card-two-content{
+      position:relative;
+      z-index:2;
+      min-height:310px;
+      padding:40px 30px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+    }
+
+    .card-two-label{
+      font-family:var(--font-mono);
+      color:#d99ab8;
+      font-size:11px;
+      letter-spacing:3px;
+      margin-bottom:18px;
+    }
+
+    .card-two-title{
+      font-size:37px;
+      font-weight:700;
+      background:linear-gradient(
+        90deg,
+        #fff,
+        #e9b5ca
+      );
+      -webkit-background-clip:text;
+      color:transparent;
+    }
+
+    .card-two-desc{
+      color:#b8adb4;
+      font-size:17px;
+      margin-top:10px;
+      max-width:400px;
+      line-height:1.8;
+    }
+
+    .card-two-button{
+      margin-top:25px;
+      padding:11px 30px;
+      border-radius:999px;
+      border:1px solid rgba(217,154,184,.55);
+      color:#f2c7d9;
+      transition:.3s;
+    }
+
+    .card-two:hover .card-two-button{
+      background:#d99ab8;
+      color:#21151c;
+      box-shadow:0 0 30px rgba(217,154,184,.25);
+    }
+
+    /* ================================
+       FOOTER
+    ================================= */
+
+    .home-footer{
+      text-align:center;
+      margin-top:70px;
+      color:#69636a;
+      font-size:14px;
+    }
+
+    .home-footer span{
+      color:#BE9552;
+    }
+
+    /* ================================
+       READER
+    ================================= */
+
+    .reader{
+      position:fixed;
+      inset:0;
+      z-index:50;
+
+      display:none;
+      flex-direction:column;
+
+      background:#12161c;
+    }
+
+    .reader.open{
+      display:flex;
+      animation:readerIn .4s ease;
+    }
+
+    @keyframes readerIn{
+      from{
+        opacity:0;
+        transform:scale(.98);
+      }
+
+      to{
+        opacity:1;
+        transform:scale(1);
+      }
+    }
+
+    .reader-header{
+      height:52px;
+      flex-shrink:0;
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+
+      padding:0 15px;
+
+      background:#1C2129;
+      color:#CFC6B8;
+
+      font-family:var(--font-mono);
+      font-size:11px;
+    }
+
+    .back-btn{
+      border:0;
+      background:transparent;
+      color:#CFC6B8;
+      cursor:pointer;
+      padding:8px 10px;
+      border-radius:6px;
+      transition:.2s;
+    }
+
+    .back-btn:hover{
+      background:rgba(255,255,255,.08);
+    }
+
+    .reader-pages{
+      position:relative;
+      flex:1;
+      overflow:hidden;
+    }
+
+    .reader-page{
+      position:absolute;
+      inset:0;
+
+      padding:35px 25px 30px;
+
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+
+      text-align:center;
+
+      overflow-y:auto;
+
+      opacity:0;
+      pointer-events:none;
+      transform:translateY(15px);
+
+      transition:
+        opacity .45s ease,
+        transform .45s ease;
+    }
+
+    .reader-page.active{
+      opacity:1;
+      pointer-events:auto;
+      transform:translateY(0);
+    }
+
+    .reader-controls{
+      flex-shrink:0;
+      background:#f6efe2;
+      padding:12px 15px 16px;
+    }
+
+    .reader-dots{
+      display:flex;
+      justify-content:center;
+      gap:7px;
+      margin-bottom:12px;
+    }
+
+    .reader-dot{
+      width:6px;
+      height:6px;
+      padding:0;
+      border:0;
+      border-radius:50%;
+      background:#d9cdb9;
+      cursor:pointer;
+      transition:.25s;
+    }
+
+    .reader-dot.active{
+      background:#6E2A3A;
+      transform:scale(1.4);
+    }
+
+    .reader-nav{
+      display:flex;
+      gap:10px;
+    }
+
+    .reader-nav button{
+      flex:1;
+      padding:10px;
+      border-radius:8px;
+      cursor:pointer;
+
+      border:1px solid #6E2A3A;
+      background:transparent;
+      color:#6E2A3A;
+    }
+
+    .reader-nav .primary{
+      background:#6E2A3A;
+      color:#F6EFE2;
+    }
+
+    /* ================================
+       CARD ONE SLIDES
+    ================================= */
+
+    .one-page{
+      background:
+        repeating-linear-gradient(
+          180deg,
+          transparent 0 38px,
+          rgba(110,42,58,.05) 39px 40px
+        ),
+        var(--paper);
+
+      color:var(--ink);
+    }
+
+    .one-page .line{
+      font-size:19px;
+      line-height:1.9;
+      margin:0;
+      max-width:500px;
+    }
+
+    .one-cover-date{
+      font-family:var(--font-mono);
+      color:var(--wine);
+      font-size:26px;
+    }
+
+    .one-cover-title{
+      font-size:30px;
+      font-weight:700;
+    }
+
+    .one-soft{
+      color:var(--ink-soft);
+    }
+
+    .one-rule{
+      width:55px;
+      height:2px;
+      background:var(--gold);
+      margin:8px auto;
+    }
+
+    .one-list{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      max-width:500px;
+    }
+
+    .one-item{
+      font-size:19px;
+      color:var(--ink);
+    }
+
+    .one-item::before{
+      content:"//";
+      font-family:var(--font-mono);
+      color:var(--gold);
+      margin-left:8px;
+    }
+
+    .scan-card{
+      width:100%;
+      max-width:450px;
+
+      background:#1C2129;
+      border-radius:12px;
+
+      padding:25px 20px;
+
+      color:#CFC6B8;
+      font-family:var(--font-mono);
+    }
+
+    .scan-title{
+      color:var(--ink);
+      font-family:var(--font-ar);
+      font-size:20px;
+      margin-bottom:15px;
+    }
+
+    .scan-label{
+      color:#8FD9B6;
+      text-align:left;
+      direction:ltr;
+    }
+
+    .bar{
+      width:100%;
+      height:10px;
+      background:rgba(255,255,255,.08);
+      border-radius:10px;
+      margin:14px 0;
+      overflow:hidden;
+    }
+
+    .bar-fill{
+      height:100%;
+      width:0;
+      background:linear-gradient(
+        90deg,
+        #E3B45C,
+        #8FD9B6
+      );
+      transition:width .05s linear;
+    }
+
+    .scan-percent{
+      text-align:center;
+      color:#E3B45C;
+      font-size:28px;
+    }
+
+    .one-quote{
+      color:#6E2A3A;
+      font-size:23px;
+      font-weight:700;
+      max-width:500px;
+    }
+
+    /* ================================
+       CARD TWO SLIDES
+    ================================= */
+
+    .two-page{
+      background:
+        radial-gradient(
+          circle at 50% 0%,
+          rgba(217,154,184,.08),
+          transparent 35%
+        ),
+        linear-gradient(
+          145deg,
+          #151119,
+          #211622
+        );
+
+      color:white;
+    }
+
+    .two-number{
+      font-family:var(--font-mono);
+      color:#d99ab8;
+      font-size:11px;
+      letter-spacing:3px;
+      margin-bottom:20px;
+    }
+
+    .two-title{
+      font-size:34px;
+      font-weight:700;
+      color:#f5dce7;
+      margin-bottom:18px;
+    }
+
+    .two-text{
+      max-width:500px;
+      font-size:20px;
+      line-height:2;
+      color:#d0c4cb;
+    }
+
+    .two-highlight{
+      color:#f0aecb;
+      font-weight:700;
+    }
+
+    .two-divider{
+      width:55px;
+      height:2px;
+      background:#d99ab8;
+      margin:18px auto;
+      box-shadow:0 0 15px rgba(217,154,184,.35);
+    }
+
+    .two-final-heart{
+      font-size:42px;
+      margin-top:20px;
+      filter:drop-shadow(0 0 15px rgba(255,150,190,.25));
+    }
+
+    /* ================================
+       RESPONSIVE
+    ================================= */
+
+    @media(max-width:600px){
+
+      #home{
+        padding:35px 15px 80px;
+      }
+
+      .home-title h1{
+        font-size:34px;
+      }
+
+      .card-one-body{
+        padding:40px 20px;
+      }
+
+      .card-one-title{
+        font-size:27px;
+      }
+
+      .card-two-title{
+        font-size:31px;
+      }
+
+      .two-title{
+        font-size:29px;
+      }
+
+      .two-text{
+        font-size:18px;
+      }
+
+      .one-page .line{
+        font-size:17px;
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce){
+
+      *,
+      *::before,
+      *::after{
+        animation:none !important;
+        transition:none !important;
+        scroll-behavior:auto !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="ambient" id="ambient"></div>
+  <!-- Floating Hearts -->
+  <div class="ambient" id="ambient"></div>
 
-<div class="app">
-  <div class="tabbar">
-    <span class="filename">our_story.txt</span>
-    <div class="dots"><span></span><span></span><span></span></div>
-    <span class="pageno" id="pageno">01 / 10</span>
-  </div>
+  <!-- =====================================================
+       HOME
+  ====================================================== -->
 
-  <div class="paper">
-    <div class="pages" id="pages"></div>
-  </div>
+  <main id="home">
 
-  <div class="controls">
-    <div class="dots-row" id="dotsRow"></div>
-    <div class="nav-row">
-      <button class="navbtn" id="prevBtn">◀ السابق</button>
-      <button class="navbtn primary" id="nextBtn">التالي ▶</button>
+    <div class="home-container">
+
+      <div class="home-title">
+        <div class="small">OUR LITTLE STORY</div>
+
+        <h1>أشياء صغيرة... بس إلها معنى 🤍</h1>
+
+        <p>
+          بعض التفاصيل تستحق تبقى محفوظة.
+        </p>
+      </div>
+
+
+      <div class="cards">
+
+        <!-- =================================================
+             CARD ONE
+        ================================================== -->
+
+        <div
+          class="story-card card-one"
+          onclick="openReader('one')"
+        >
+
+          <div class="card-one-top">
+
+            <span>our_story.txt</span>
+
+            <div class="terminal-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+
+            <span>01</span>
+
+          </div>
+
+
+          <div class="card-one-body">
+
+            <div class="card-one-date">
+              17 / 8 / 2026
+            </div>
+
+            <div class="card-one-line"></div>
+
+            <div class="card-one-title">
+              بداية حلوة...
+            </div>
+
+            <div class="card-one-desc">
+              ما كنت مخطط إلها 🤍
+            </div>
+
+            <div class="open-one">
+              فتح الكارت →
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             CARD TWO
+        ================================================== -->
+
+        <div
+          class="story-card card-two"
+          onclick="openReader('two')"
+        >
+
+          <div class="card-two-content">
+
+            <div class="card-two-label">
+              SOMETHING UNEXPECTED
+            </div>
+
+            <div class="card-two-title">
+              مجرد صدفة؟
+            </div>
+
+            <div class="card-two-desc">
+              بعض الأشخاص يدخلون حياتنا بالصدفة...
+              وبعدها تبدأ الصدفة تاخذ معنى ثاني.
+            </div>
+
+            <div class="card-two-button">
+              افتحيها 🤍
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="home-footer">
+        made with a little bit of code
+        <span>♡</span>
+        and a lot of feeling
+      </div>
+
     </div>
-  </div>
-</div>
+
+  </main>
+
+
+  <!-- =====================================================
+       READER
+  ====================================================== -->
+
+  <section class="reader" id="reader">
+
+    <div class="reader-header">
+
+      <button
+        class="back-btn"
+        onclick="closeReader()"
+      >
+        ← الصفحة الرئيسية
+      </button>
+
+      <span id="readerTitle">
+        story
+      </span>
+
+      <span id="readerPage">
+        01 / 10
+      </span>
+
+    </div>
+
+
+    <div
+      class="reader-pages"
+      id="readerPages"
+    ></div>
+
+
+    <div class="reader-controls">
+
+      <div
+        class="reader-dots"
+        id="readerDots"
+      ></div>
+
+      <div class="reader-nav">
+
+        <button
+          id="prevBtn"
+          onclick="previousPage()"
+        >
+          ◀ السابق
+        </button>
+
+        <button
+          id="nextBtn"
+          class="primary"
+          onclick="nextPage()"
+        >
+          التالي ▶
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
 
 <script>
-const pagesData = [
-  { type:'cover', date:'17 / 8 / 2026', title:'بداية حلوة...', sub:'ما كنت مخطط إلها 🤍' },
 
-  { type:'text', lines:[
-      'اليوم مو مجرد تاريخ تعارف...','',
-      'اليوم هو اليوم اللي تعرفت بيه على شخص،',
-      'ومن أول فترة قصيرة حسّيت أكو أشياء هواي بينا تشبه بعض.'
-  ]},
+  /* =====================================================
+     DATA
+  ====================================================== */
 
-  { type:'list', items:[
-      'نفس الاهتمام،',
-      'نفس حب البرمجة والتطوير،',
-      'نفس الحماس من نحچي عن فكرة جديدة،',
-      'وحتى طريقة التفكير ببعض الأمور قريبة بشكل يخلي الواحد يستغرب شوي 😂'
-  ]},
+  const stories = {
 
-  { type:'scan', title:'نسبة التشابه بينا؟', percent:95 },
+    /* ===================================================
+       STORY ONE
+    ==================================================== */
 
-  { type:'text', lines:[
-      'يمكن النسبة مو علمية،','بس الإحساس اللي وراها حقيقي.','',
-      'لأن مرات الإنسان يتعرف على شخص جديد،','وبوقت قصير يحس وكأنه يعرفه من زمان...','',
-      'مو لأنهم عاشوا نفس الأشياء،','بس لأن طريقة تفكيرهم قريبة،',
-      'واهتماماتهم تجمعهم،','والحچي بينهم يكون سهل بدون ما يحتاج الواحد يتصنع.'
-  ]},
+    one: {
 
-  { type:'text', lines:[
-      'وأعتقد هذا أكثر شي عجبني ببدايتنا...','',
-      'إنه لقينا شي مشترك يجمعنا،','مو بس صداقة وحچي،',
-      'إنما حتى الشغف اللي نحبّه،','والأفكار اللي نريد نطورها،',
-      'والمشاريع اللي ممكن بيوم من الأيام نشتغل عليها سوه.'
-  ]},
+      title:"our_story.txt",
 
-  { type:'text', lines:[
-      'يمكن اليوم مجرد بداية...','',
-      'بس حبيت أخلي 17/8/2026 محفوظة بمكان صغير،',
-      'لأنها أول صفحة من قصة تعارف أتمنى تكون حلوة،',
-      'وتكبر ويا الوقت بشكل أجمل.'
-  ]},
+      pages:[
 
-  { type:'quote', lines:[
-      'ويمكن بعد فترة،','من نشتغل سوه على مشروع ونشوف شكد تطورنا،','نرجع لهذا التاريخ ونكول:'
-  ], quote:'"تتذكرين؟ من هنا بلشت السالفة." 🤍' },
+        {
+          type:"cover",
 
-  { type:'text', lines:[
-      'إلى صديقتي الجديدة...','',
-      'ما أعرف شنو راح يصير بعدين،','ولا أريد أستعجل الأشياء...','',
-      'بس أعرف إن وجود شخص يشبهك بهالأشياء','شي حلو يستحق الواحد يحافظ عليه.'
-  ]},
+          date:"17 / 8 / 2026",
 
-  { type:'closing', lines:[
-      'فخلّي 17/8/2026 تبقى أول تاريخ بمشروعنا...',
-      'مو مشروع برمجي وبس،',
-      'إنما بداية صداقة حلوة يمكن الأيام تكتب إلها أشياء أجمل.'
-  ]}
-];
+          title:"بداية حلوة...",
 
-const pagesEl = document.getElementById('pages');
-const dotsRow = document.getElementById('dotsRow');
-const pagenoEl = document.getElementById('pageno');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
+          sub:"ما كنت مخطط إلها 🤍"
+        },
 
-let current = 0;
+        {
+          type:"text",
 
-function buildPage(data, index){
-  const el = document.createElement('div');
-  el.className = 'page';
-  el.dataset.index = index;
+          lines:[
+            "اليوم مو مجرد تاريخ تعارف...",
+            "",
+            "اليوم هو اليوم اللي تعرفت بيه على شخص،",
+            "ومن أول فترة قصيرة حسّيت أكو أشياء هواي بينا تشبه بعض."
+          ]
+        },
 
-  if(data.type === 'cover'){
-    el.innerHTML = `
-      <div class="cover-date">${data.date}</div>
-      <div class="rule"></div>
-      <div class="cover-title">${data.title}</div>
-      <div class="cover-sub">${data.sub}</div>`;
-  } else if(data.type === 'text' || data.type === 'closing'){
-    el.innerHTML = data.lines.map(l => l === ''
-      ? '<div class="spacer"></div>'
-      : `<p class="line">${l}</p>`).join('');
-    if(data.type === 'closing'){
-      el.innerHTML += `<div class="mark">🤍</div>`;
+        {
+          type:"list",
+
+          items:[
+            "نفس الاهتمام،",
+            "نفس حب البرمجة والتطوير،",
+            "نفس الحماس من نحچي عن فكرة جديدة،",
+            "وحتى طريقة التفكير ببعض الأمور قريبة بشكل يخلي الواحد يستغرب شوي 😂"
+          ]
+        },
+
+        {
+          type:"scan",
+
+          title:"نسبة التشابه بينا؟",
+
+          percent:95
+        },
+
+        {
+          type:"text",
+
+          lines:[
+            "يمكن النسبة مو علمية،",
+            "بس الإحساس اللي وراها حقيقي.",
+            "",
+            "لأن مرات الإنسان يتعرف على شخص جديد،",
+            "وبوقت قصير يحس وكأنه يعرفه من زمان...",
+            "",
+            "مو لأنهم عاشوا نفس الأشياء،",
+            "بس لأن طريقة تفكيرهم قريبة،",
+            "واهتماماتهم تجمعهم،",
+            "والحچي بينهم يكون سهل بدون ما يحتاج الواحد يتصنع."
+          ]
+        },
+
+        {
+          type:"text",
+
+          lines:[
+            "وأعتقد هذا أكثر شي عجبني ببدايتنا...",
+            "",
+            "إنه لقينا شي مشترك يجمعنا،",
+            "مو بس صداقة وحچي،",
+            "إنما حتى الشغف اللي نحبّه،",
+            "والأفكار اللي نريد نطورها،",
+            "والمشاريع اللي ممكن بيوم من الأيام نشتغل عليها سوه."
+          ]
+        },
+
+        {
+          type:"text",
+
+          lines:[
+            "يمكن اليوم مجرد بداية...",
+            "",
+            "بس حبيت أخلي 17/8/2026 محفوظة بمكان صغير،",
+            "لأنها أول صفحة من قصة تعارف أتمنى تكون حلوة،",
+            "وتكبر ويا الوقت بشكل أجمل."
+          ]
+        },
+
+        {
+          type:"quote",
+
+          lines:[
+            "ويمكن بعد فترة،",
+            "من نشتغل سوه على مشروع ونشوف شكد تطورنا،",
+            "نرجع لهذا التاريخ ونكول:"
+          ],
+
+          quote:"تتذكرين؟ من هنا بلشت السالفة. 🤍"
+        },
+
+        {
+          type:"text",
+
+          lines:[
+            "إلى صديقتي الجديدة...",
+            "",
+            "ما أعرف شنو راح يصير بعدين،",
+            "ولا أريد أستعجل الأشياء...",
+            "",
+            "بس أعرف إن وجود شخص يشبهك بهالأشياء",
+            "شي حلو يستحق الواحد يحافظ عليه."
+          ]
+        },
+
+        {
+          type:"closing",
+
+          lines:[
+            "فخلّي 17/8/2026 تبقى أول تاريخ بمشروعنا...",
+            "مو مشروع برمجي وبس،",
+            "إنما بداية صداقة حلوة يمكن الأيام تكتب إلها أشياء أجمل."
+          ]
+        }
+
+      ]
+
+    },
+
+
+    /* ===================================================
+       STORY TWO
+    ==================================================== */
+
+    two: {
+
+      title:"something_unexpected.txt",
+
+      pages:[
+
+        {
+          title:"يمكن صدفة...",
+
+          text:[
+            "الغريب بالأشياء الحلوة،",
+            "إنها غالبًا ما تجي بموعد محدد."
+          ]
+        },
+
+        {
+          title:"ما كنت أدور",
+
+          text:[
+            "بصراحة...",
+            "",
+            "ما كنت داخل هالفترة وأنا أدور على شخص جديد،",
+            "ولا كنت متوقع أتعرف على أحد بهالسرعة."
+          ]
+        },
+
+        {
+          title:"وبعدين إنتِ",
+
+          text:[
+            "بس فجأة صار أكو شخص،",
+            "الحچي وياه ما يحتاج ترتيب،",
+            "والضحكة تطلع بسهولة،",
+            "والوقت يمشي بدون ما نحس بيه."
+          ]
+        },
+
+        {
+          title:"التفاصيل الصغيرة",
+
+          text:[
+            "يمكن مو الأشياء الكبيرة هي اللي شدتني...",
+            "",
+            "يمكن التفاصيل الصغيرة.",
+            "",
+            "طريقة حچيچ،",
+            "ضحكتچ،",
+            "اهتماماتچ،",
+            "وحتى الأشياء اللي تختلفين بيها عني."
+          ]
+        },
+
+        {
+          title:"أكو شي مميز",
+
+          text:[
+            "وأكو شعور غريب حلو...",
+            "",
+            "إن الواحد يلقى شخص يقدر يحچي وياه",
+            "عن فكرة برمجية،",
+            "وبعدها بدقائق يتحول الحچي لشي ثاني تمامًا",
+            "والاثنين يبقون ممتعين."
+          ]
+        },
+
+        {
+          title:"مو مجرد تشابه",
+
+          text:[
+            "يمكن التشابه بينا كان أول شي لفت انتباهي،",
+            "",
+            "بس مو هو الشي الوحيد.",
+            "",
+            "لأن أحيانًا الشخص ما يعجبك لأنه يشبهك...",
+            "يعجبك لأنه يخليك تشوف أشياء بنفسك بطريقة مختلفة."
+          ]
+        },
+
+        {
+          title:"وأحب هالشي بيچ",
+
+          text:[
+            "أحب إن الحچي وياچ ما أحسه ثقيل،",
+            "وأحب إن أكدر أكون على طبيعتي،",
+            "",
+            "وأكثر شي حلو؟",
+            "",
+            "إنه أحس أكو مساحة أضحك،",
+            "وأغازل،",
+            "وأحچي عن أفكاري،",
+            "بدون ما أحس لازم أمثل دور معين."
+          ]
+        },
+
+        {
+          title:"يمكن إنتِ ما تعرفين",
+
+          text:[
+            "بس يمكن إنتِ ما تعرفين شكد بعض التفاصيل",
+            "اللي تسوينها بشكل عادي",
+            "ممكن تترك أثر حلو بقلب شخص ثاني.",
+            "",
+            "كلمة،",
+            "ضحكة،",
+            "اهتمام صغير...",
+            "",
+            "وأحيانًا هاي الأشياء تكفي حتى يتغير مزاج يوم كامل."
+          ]
+        },
+
+        {
+          title:"والغزل؟",
+
+          text:[
+            "أما موضوع الغزل...",
+            "",
+            "فخليني أكون صريح 😂",
+            "",
+            "أكو ناس حلوة بالشكل،",
+            "وأكو ناس حلوة بالحچي،",
+            "",
+            "بس المشكلة الحقيقية...",
+            "",
+            "لما يجتمع الاثنين بشخص واحد."
+          ]
+        },
+
+        {
+          title:"يمكن مو صدفة",
+
+          text:[
+            "فيمكن فعلًا البداية كانت صدفة...",
+            "",
+            "بس الشعور الحلو اللي صار بعدها",
+            "ما أحسه مجرد صدفة.",
+            "",
+            "وأعتقد أجمل شي بهالبداية،",
+            "إنها بعدها بالبداية أصلًا...",
+            "",
+            "وكلشي بعده مفتوح على احتمالات حلوة."
+          ],
+
+          final:true
+        }
+
+      ]
+
     }
-  } else if(data.type === 'list'){
-    el.innerHTML = data.items.map(i => `<div class="list-item">${i}</div>`).join('');
-  } else if(data.type === 'scan'){
-    el.innerHTML = `
-      <div class="scan-title">${data.title}</div>
-      <div class="scan-card">
-        <div class="scan-label"><span class="analyzing">جاري التحليل...</span><span class="cursor"></span></div>
-        <div class="bar-track"><div class="bar-fill" id="barFill"></div></div>
-        <div class="scan-percent" id="scanPercent">0%</div>
-      </div>`;
-  } else if(data.type === 'quote'){
-    el.innerHTML = data.lines.map(l => `<p class="line soft">${l}</p>`).join('') +
-      `<p class="quote">${data.quote}</p>`;
+
+  };
+
+
+  /* =====================================================
+     READER STATE
+  ====================================================== */
+
+  let currentStory = null;
+  let currentPage = 0;
+
+
+  const reader = document.getElementById("reader");
+  const readerPages = document.getElementById("readerPages");
+  const readerDots = document.getElementById("readerDots");
+
+  const readerTitle = document.getElementById("readerTitle");
+  const readerPage = document.getElementById("readerPage");
+
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+
+
+  /* =====================================================
+     OPEN READER
+  ====================================================== */
+
+  function openReader(storyName){
+
+    currentStory = stories[storyName];
+    currentPage = 0;
+
+    readerTitle.textContent = currentStory.title;
+
+    readerPages.innerHTML = "";
+    readerDots.innerHTML = "";
+
+    currentStory.pages.forEach((page,index)=>{
+
+      const pageEl = document.createElement("div");
+
+      pageEl.className =
+        "reader-page " +
+        (storyName === "one" ? "one-page" : "two-page");
+
+      pageEl.dataset.index = index;
+
+
+      /* ================================================
+         STORY ONE
+      ================================================= */
+
+      if(storyName === "one"){
+
+        if(page.type === "cover"){
+
+          pageEl.innerHTML = `
+
+            <div class="one-cover-date">
+              ${page.date}
+            </div>
+
+            <div class="one-rule"></div>
+
+            <div class="one-cover-title">
+              ${page.title}
+            </div>
+
+            <div class="one-soft">
+              ${page.sub}
+            </div>
+
+          `;
+
+        }
+
+        else if(page.type === "text"){
+
+          pageEl.innerHTML =
+            page.lines
+              .map(line =>
+                line === ""
+                ? `<div style="height:8px"></div>`
+                : `<p class="line">${line}</p>`
+              )
+              .join("");
+
+        }
+
+        else if(page.type === "list"){
+
+          pageEl.innerHTML = `
+
+            <div class="one-list">
+
+              ${page.items.map(item => `
+                <div class="one-item">
+                  ${item}
+                </div>
+              `).join("")}
+
+            </div>
+
+          `;
+
+        }
+
+        else if(page.type === "scan"){
+
+          pageEl.innerHTML = `
+
+            <div class="scan-title">
+              ${page.title}
+            </div>
+
+            <div class="scan-card">
+
+              <div class="scan-label">
+                جاري التحليل...
+              </div>
+
+              <div class="bar">
+                <div
+                  class="bar-fill"
+                  id="barFill"
+                ></div>
+              </div>
+
+              <div
+                class="scan-percent"
+                id="scanPercent"
+              >
+                0%
+              </div>
+
+            </div>
+
+          `;
+
+        }
+
+        else if(page.type === "quote"){
+
+          pageEl.innerHTML = `
+
+            ${page.lines.map(line => `
+              <p class="line one-soft">
+                ${line}
+              </p>
+            `).join("")}
+
+            <div class="one-rule"></div>
+
+            <div class="one-quote">
+              "${page.quote}"
+            </div>
+
+          `;
+
+        }
+
+        else if(page.type === "closing"){
+
+          pageEl.innerHTML = `
+
+            ${page.lines.map(line => `
+              <p class="line">
+                ${line}
+              </p>
+            `).join("")}
+
+            <div class="two-final-heart">
+              🤍
+            </div>
+
+          `;
+
+        }
+
+      }
+
+
+      /* ================================================
+         STORY TWO
+      ================================================= */
+
+      else{
+
+        pageEl.innerHTML = `
+
+          <div class="two-number">
+            ${String(index+1).padStart(2,"0")}
+            /
+            ${currentStory.pages.length}
+          </div>
+
+          <div class="two-title">
+            ${page.title}
+          </div>
+
+          <div class="two-divider"></div>
+
+          <div class="two-text">
+
+            ${page.text.map((line,lineIndex)=>{
+
+              if(line === ""){
+                return `<div style="height:12px"></div>`;
+              }
+
+              return `
+                <div>
+                  ${line}
+                </div>
+              `;
+
+            }).join("")}
+
+          </div>
+
+          ${
+            page.final
+            ? `<div class="two-final-heart">♡</div>`
+            : ""
+          }
+
+        `;
+
+      }
+
+
+      readerPages.appendChild(pageEl);
+
+
+      /* Dot */
+
+      const dot = document.createElement("button");
+
+      dot.className = "reader-dot";
+
+      dot.setAttribute(
+        "aria-label",
+        `الصفحة ${index+1}`
+      );
+
+      dot.onclick = () => goToPage(index);
+
+      readerDots.appendChild(dot);
+
+    });
+
+
+    reader.classList.add("open");
+
+    document.body.style.overflow = "hidden";
+
+    goToPage(0);
+
   }
-  return el;
-}
 
-pagesData.forEach((d,i) => pagesEl.appendChild(buildPage(d,i)));
 
-pagesData.forEach((_,i) => {
-  const b = document.createElement('button');
-  b.className = 'dot';
-  b.setAttribute('aria-label', 'الذهاب إلى الصفحة ' + (i+1));
-  b.addEventListener('click', () => goTo(i));
-  dotsRow.appendChild(b);
-});
+  /* =====================================================
+     CLOSE
+  ====================================================== */
 
-const pageEls = [...pagesEl.children];
-const dotEls = [...dotsRow.children];
+  function closeReader(){
 
-function pad(n){ return String(n).padStart(2,'0'); }
+    reader.classList.remove("open");
 
-function goTo(index){
-  if(index < 0 || index >= pagesData.length) return;
-  current = index;
+    document.body.style.overflow = "";
 
-  pageEls.forEach((el,i) => el.classList.toggle('active', i === index));
-  dotEls.forEach((el,i) => el.classList.toggle('active', i === index));
-  pagenoEl.textContent = `${pad(index+1)} / ${pagesData.length}`;
-
-  prevBtn.disabled = index === 0;
-  if(index === pagesData.length - 1){
-    nextBtn.textContent = 'من البداية ↺';
-  } else {
-    nextBtn.textContent = 'التالي ▶';
   }
 
-  if(pagesData[index].type === 'scan'){
-    runScan(pagesData[index].percent);
-  }
-}
 
-function runScan(target){
-  const fill = document.getElementById('barFill');
-  const label = document.getElementById('scanPercent');
-  if(!fill || !label) return;
-  let start = null;
-  const duration = 1400;
-  fill.style.width = '0%';
-  label.textContent = '0%';
+  /* =====================================================
+     GO TO PAGE
+  ====================================================== */
 
-  function step(ts){
-    if(!start) start = ts;
-    const progress = Math.min((ts - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    const value = Math.round(eased * target);
-    fill.style.width = value + '%';
-    label.textContent = value + '%';
-    if(progress < 1){
-      requestAnimationFrame(step);
-    } else {
-      label.textContent = target + '% 🤍';
+  function goToPage(index){
+
+    if(!currentStory) return;
+
+    if(
+      index < 0 ||
+      index >= currentStory.pages.length
+    ){
+      return;
     }
+
+    currentPage = index;
+
+
+    const pages =
+      [...readerPages.children];
+
+    const dots =
+      [...readerDots.children];
+
+
+    pages.forEach((page,i)=>{
+      page.classList.toggle(
+        "active",
+        i === index
+      );
+    });
+
+
+    dots.forEach((dot,i)=>{
+      dot.classList.toggle(
+        "active",
+        i === index
+      );
+    });
+
+
+    readerPage.textContent =
+      `${String(index+1).padStart(2,"0")} / ${currentStory.pages.length}`;
+
+
+    prevBtn.disabled =
+      index === 0;
+
+
+    if(
+      index === currentStory.pages.length - 1
+    ){
+
+      nextBtn.textContent =
+        "من البداية ↺";
+
+    }
+
+    else{
+
+      nextBtn.textContent =
+        "التالي ▶";
+
+    }
+
+
+    /* Scan animation */
+
+    if(
+      currentStory.pages[index].type === "scan"
+    ){
+
+      runScan(
+        currentStory.pages[index].percent
+      );
+
+    }
+
   }
-  requestAnimationFrame(step);
-}
 
-prevBtn.addEventListener('click', () => goTo(current - 1));
-nextBtn.addEventListener('click', () => {
-  if(current === pagesData.length - 1){ goTo(0); }
-  else { goTo(current + 1); }
-});
 
-document.addEventListener('keydown', (e) => {
-  if(e.key === 'ArrowRight'){
-    if(current === pagesData.length - 1) goTo(0); else goTo(current + 1);
-  } else if(e.key === 'ArrowLeft'){
-    goTo(current - 1);
+  /* =====================================================
+     NEXT
+  ====================================================== */
+
+  function nextPage(){
+
+    if(!currentStory) return;
+
+
+    if(
+      currentPage ===
+      currentStory.pages.length - 1
+    ){
+
+      goToPage(0);
+
+    }
+
+    else{
+
+      goToPage(currentPage + 1);
+
+    }
+
   }
-});
 
-// basic touch swipe
-let touchX = null;
-document.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
-document.addEventListener('touchend', e => {
-  if(touchX === null) return;
-  const dx = e.changedTouches[0].clientX - touchX;
-  if(Math.abs(dx) > 50){
-    if(dx > 0) goTo(current - 1);
-    else { if(current === pagesData.length - 1) goTo(0); else goTo(current + 1); }
+
+  /* =====================================================
+     PREVIOUS
+  ====================================================== */
+
+  function previousPage(){
+
+    goToPage(currentPage - 1);
+
   }
-  touchX = null;
-});
 
-goTo(0);
 
-// ambient hearts
-const ambient = document.getElementById('ambient');
-const heartChars = ['🤍','♥'];
-for(let i=0;i<10;i++){
-  const h = document.createElement('div');
-  h.className = 'heart';
-  h.textContent = heartChars[i % 2];
-  h.style.left = Math.random()*100 + '%';
-  h.style.setProperty('--drift', (Math.random()*60-30) + 'px');
-  h.style.fontSize = (10 + Math.random()*10) + 'px';
-  h.style.animationDuration = (10 + Math.random()*8) + 's';
-  h.style.animationDelay = (Math.random()*10) + 's';
-  ambient.appendChild(h);
-}
+  /* =====================================================
+     SCAN
+  ====================================================== */
+
+  function runScan(target){
+
+    const fill =
+      document.getElementById("barFill");
+
+    const label =
+      document.getElementById("scanPercent");
+
+
+    if(!fill || !label) return;
+
+
+    let start = null;
+
+    const duration = 1500;
+
+
+    fill.style.width = "0%";
+
+    label.textContent = "0%";
+
+
+    function step(timestamp){
+
+      if(!start){
+        start = timestamp;
+      }
+
+
+      const progress =
+        Math.min(
+          (timestamp - start) / duration,
+          1
+        );
+
+
+      const eased =
+        1 -
+        Math.pow(
+          1 - progress,
+          3
+        );
+
+
+      const value =
+        Math.round(
+          eased * target
+        );
+
+
+      fill.style.width =
+        value + "%";
+
+
+      label.textContent =
+        value + "%";
+
+
+      if(progress < 1){
+
+        requestAnimationFrame(step);
+
+      }
+
+      else{
+
+        label.textContent =
+          target + "% 🤍";
+
+      }
+
+    }
+
+
+    requestAnimationFrame(step);
+
+  }
+
+
+  /* =====================================================
+     KEYBOARD
+  ====================================================== */
+
+  document.addEventListener(
+    "keydown",
+    event => {
+
+      if(
+        !reader.classList.contains("open")
+      ){
+        return;
+      }
+
+
+      if(event.key === "ArrowRight"){
+
+        nextPage();
+
+      }
+
+      else if(event.key === "ArrowLeft"){
+
+        previousPage();
+
+      }
+
+      else if(event.key === "Escape"){
+
+        closeReader();
+
+      }
+
+    }
+  );
+
+
+  /* =====================================================
+     TOUCH SWIPE
+  ====================================================== */
+
+  let touchStartX = null;
+
+
+  reader.addEventListener(
+    "touchstart",
+    event => {
+
+      touchStartX =
+        event.touches[0].clientX;
+
+    },
+    {passive:true}
+  );
+
+
+  reader.addEventListener(
+    "touchend",
+    event => {
+
+      if(touchStartX === null){
+        return;
+      }
+
+
+      const touchEndX =
+        event.changedTouches[0].clientX;
+
+
+      const difference =
+        touchEndX - touchStartX;
+
+
+      if(Math.abs(difference) > 50){
+
+        if(difference < 0){
+
+          nextPage();
+
+        }
+
+        else{
+
+          previousPage();
+
+        }
+
+      }
+
+
+      touchStartX = null;
+
+    },
+    {passive:true}
+  );
+
+
+  /* =====================================================
+     FLOATING HEARTS
+  ====================================================== */
+
+  const ambient =
+    document.getElementById("ambient");
+
+
+  const heartChars =
+    ["🤍","♡","♥"];
+
+
+  for(let i=0;i<15;i++){
+
+    const heart =
+      document.createElement("div");
+
+
+    heart.className =
+      "heart";
+
+
+    heart.textContent =
+      heartChars[
+        i % heartChars.length
+      ];
+
+
+    heart.style.left =
+      Math.random()*100 + "%";
+
+
+    heart.style.fontSize =
+      (10 + Math.random()*12) + "px";
+
+
+    heart.style.animationDuration =
+      (10 + Math.random()*10) + "s";
+
+
+    heart.style.animationDelay =
+      (Math.random()*10) + "s";
+
+
+    heart.style.setProperty(
+      "--drift",
+      (Math.random()*80 - 40) + "px"
+    );
+
+
+    ambient.appendChild(heart);
+
+  }
+
 </script>
+
 </body>
 </html>
