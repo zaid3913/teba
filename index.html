@@ -337,7 +337,7 @@ button{
 
 
 /* =====================================================
-   CARD 3 — BEAUTY
+   CARD 3
 ===================================================== */
 
 .card-three{
@@ -455,6 +455,127 @@ button{
 
   box-shadow:
     0 0 35px rgba(229,175,197,.20);
+}
+
+
+/* =====================================================
+   CARD 4 — BEAUTY / VOICE
+===================================================== */
+
+.card-four{
+  min-height:360px;
+  border-radius:30px;
+  overflow:hidden;
+  position:relative;
+
+  background:
+    radial-gradient(
+      circle at 30% 20%,
+      rgba(255,210,225,.14),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 80% 75%,
+      rgba(190,110,150,.12),
+      transparent 30%
+    ),
+    linear-gradient(
+      145deg,
+      #171119,
+      #2d1a27 48%,
+      #11131b
+    );
+
+  border:1px solid rgba(255,220,235,.11);
+
+  box-shadow:
+    0 35px 95px rgba(0,0,0,.52),
+    inset 0 1px rgba(255,255,255,.07);
+}
+
+.card-four::before{
+  content:"♡";
+  position:absolute;
+  right:24px;
+  top:18px;
+  font-size:65px;
+  color:rgba(255,210,230,.13);
+  font-family:serif;
+}
+
+.card-four::after{
+  content:"";
+  position:absolute;
+  width:250px;
+  height:250px;
+  border-radius:50%;
+  background:rgba(231,148,183,.10);
+  filter:blur(65px);
+  left:-100px;
+  bottom:-100px;
+}
+
+.card-four-content{
+  position:relative;
+  z-index:2;
+
+  min-height:360px;
+
+  padding:48px 28px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+
+  text-align:center;
+}
+
+.card-four-label{
+  font-family:var(--font-mono);
+  font-size:10px;
+  letter-spacing:4px;
+  color:#e0a7bd;
+  margin-bottom:18px;
+}
+
+.card-four-title{
+  font-size:40px;
+  font-weight:700;
+  color:#fae4ed;
+
+  text-shadow:
+    0 5px 30px rgba(255,160,195,.18);
+}
+
+.card-four-desc{
+  color:#cbbcc5;
+  font-size:18px;
+  line-height:1.9;
+  max-width:450px;
+  margin-top:12px;
+}
+
+.card-four-button{
+  margin-top:27px;
+
+  padding:11px 34px;
+
+  border-radius:999px;
+
+  border:1px solid rgba(232,171,199,.48);
+
+  color:#efc4d5;
+
+  transition:.3s;
+}
+
+.card-four:hover .card-four-button{
+  background:#e6b0c6;
+  color:#25151f;
+
+  box-shadow:
+    0 0 40px rgba(230,176,198,.23);
 }
 
 
@@ -584,6 +705,7 @@ button{
   justify-content:center;
   gap:7px;
   margin-bottom:12px;
+  flex-wrap:wrap;
 }
 
 .reader-dot{
@@ -877,6 +999,81 @@ button{
 
 
 /* =====================================================
+   STORY FOUR — BEAUTY / VOICE
+===================================================== */
+
+.four-page{
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(255,193,218,.13),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 15% 85%,
+      rgba(203,117,151,.10),
+      transparent 30%
+    ),
+    linear-gradient(
+      145deg,
+      #151017,
+      #2a1925 50%,
+      #171118
+    );
+
+  color:#fff;
+}
+
+.four-number{
+  font-family:var(--font-mono);
+  color:#e3a8c0;
+  font-size:11px;
+  letter-spacing:4px;
+  margin-bottom:18px;
+}
+
+.four-title{
+  font-size:35px;
+  font-weight:700;
+  color:#fae2eb;
+
+  text-shadow:
+    0 5px 25px rgba(255,165,200,.13);
+}
+
+.four-line{
+  width:55px;
+  height:2px;
+  background:#dda5bd;
+  margin:17px auto;
+
+  box-shadow:
+    0 0 18px rgba(221,165,189,.30);
+}
+
+.four-text{
+  max-width:520px;
+  color:#d4c4cd;
+  font-size:20px;
+  line-height:2.05;
+}
+
+.four-highlight{
+  color:#efb4cc;
+  font-weight:700;
+}
+
+.four-heart{
+  font-size:50px;
+  color:#e8a9c2;
+  margin-top:20px;
+
+  filter:
+    drop-shadow(0 0 22px rgba(233,169,195,.28));
+}
+
+
+/* =====================================================
    RESPONSIVE
 ===================================================== */
 
@@ -906,18 +1103,29 @@ button{
     font-size:35px;
   }
 
-  .three-title{
+  .card-four-title{
+    font-size:34px;
+  }
+
+  .three-title,
+  .four-title{
     font-size:29px;
   }
 
   .three-text,
-  .two-text{
+  .two-text,
+  .four-text{
     font-size:18px;
   }
 
   .one-page .line{
     font-size:17px;
   }
+
+  .reader-page{
+    padding:25px 18px 25px;
+  }
+
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -1089,6 +1297,40 @@ button{
           </div>
 
           <div class="card-three-button">
+            افتحيها...
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           CARD 4 — NEW
+      ================================================== -->
+
+      <div
+        class="story-card card-four"
+        onclick="openReader('four')"
+      >
+
+        <div class="card-four-content">
+
+          <div class="card-four-label">
+            THE DETAILS I NOTICE
+          </div>
+
+          <div class="card-four-title">
+            بيچ تفاصيل أحبها 🤍
+          </div>
+
+          <div class="card-four-desc">
+            مو بس جمال ينشاف...
+            أكو صوت، وضحكة، وعيون،
+            وتفاصيل صغيرة خلت وجودچ مختلف.
+          </div>
+
+          <div class="card-four-button">
             افتحيها...
           </div>
 
@@ -1457,7 +1699,7 @@ const stories = {
 
 
   /* ===================================================
-     STORY THREE — ما نسيت
+     STORY THREE
   ==================================================== */
 
   three:{
@@ -1619,6 +1861,201 @@ const stories = {
 
     ]
 
+  },
+
+
+  /* ===================================================
+     STORY FOUR — NEW
+     BEAUTY / VOICE / DETAILS
+  ==================================================== */
+
+  four:{
+
+    title:"the_details_i_notice.txt",
+
+    pages:[
+
+      {
+        title:"أكو شي بيچ...",
+
+        text:[
+          "كل ما أفكر شنو أكثر شي يعجبني بيچ،",
+          "أحتار شنو أختار أول شي.",
+          "",
+          "لأن الموضوع مو تفصيلة وحدة...",
+          "",
+          "أكو جمال،",
+          "وأكو صوت،",
+          "وأكو ضحكة،",
+          "وأكو تفاصيل صغيرة يمكن إنتِ أصلًا ما تنتبهين إلها."
+        ]
+      },
+
+      {
+        title:"جمالچ مو عادي",
+
+        text:[
+          "أكو ناس من تشوفهم تكول:",
+          "«حلوين» وتنتهي السالفة.",
+          "",
+          "بس جمالچ مو من النوع اللي ينشاف مرة وينتهي.",
+          "",
+          "كل مرة أركز بيچ",
+          "ألاحظ شي جديد يخلي الصورة ببالي أحلى من قبل."
+        ]
+      },
+
+      {
+        title:"عيونچ 🤍",
+
+        text:[
+          "عيونچ بالذات بيها شي ما أعرف أوصفه.",
+          "",
+          "مو بس لأنهن حلوات...",
+          "",
+          "بس لأن بيهن تعابير تحچي.",
+          "مرات نظرة وحدة منچ",
+          "تكفي حتى أفهم شعورچ",
+          "قبل لا تحچين."
+        ]
+      },
+
+      {
+        title:"ابتسامتچ",
+
+        text:[
+          "وأما ابتسامتچ...",
+          "",
+          "هاي وحدها تحتاج كارت كامل 😂",
+          "",
+          "أحب شلون من تبتسمين",
+          "تتغير ملامحچ كلها بطريقة حلوة.",
+          "",
+          "والأحلى من هذا كله",
+          "لما تكون الضحكة عفوية،",
+          "لأن بيها شي يخلي الواحد يبتسم غصب عنه."
+        ]
+      },
+
+      {
+        title:"وصوتچ...",
+
+        text:[
+          "بس أكو شي ثاني يمكن ما گلتلچ عنه كفاية...",
+          "",
+          "صوتچ.",
+          "",
+          "صوتچ مو بس حلو أسمعه،",
+          "بي راحة غريبة.",
+          "",
+          "حتى لو تحچين عن أبسط شي،",
+          "طريقة صوتچ ونبرتچ",
+          "تخلي الكلام يبقى ببالي."
+        ]
+      },
+
+      {
+        title:"طريقة حچيچ",
+
+        text:[
+          "وأحب طريقة حچيچ أكثر مما تتصورين.",
+          "",
+          "تغير نبرتچ،",
+          "ضحكتچ بنص الكلام،",
+          "الكلمات اللي تكررينها،",
+          "وحتى الطريقة اللي تتفاعلين بيها.",
+          "",
+          "يمكن كلها أشياء عادية بالنسبة إلچ...",
+          "بس بالنسبة إليّ،",
+          "هاي التفاصيل هي اللي تخلي صوتچ مميز."
+        ]
+      },
+
+      {
+        title:"التفاصيل الصغيرة",
+
+        text:[
+          "تعرفين شنو أكثر شي يجذبني؟",
+          "",
+          "التفاصيل اللي إنتِ ما تعتبرينها مهمة.",
+          "",
+          "حركة صغيرة،",
+          "تعبير بوجهچ،",
+          "طريقة ضحكة،",
+          "كلمة تنقال بعفوية...",
+          "",
+          "أني أحب هاي الأشياء،",
+          "لأنها مو شي مصطنع.",
+          "هي ببساطة... إنتِ."
+        ]
+      },
+
+      {
+        title:"حضورچ",
+
+        text:[
+          "وأكو شي ما تنقله الصورة أبدًا...",
+          "",
+          "حضورچ.",
+          "",
+          "طريقة وجودچ بالحچي،",
+          "طريقة تفاعلچ،",
+          "حتى سكوتچ أحيانًا.",
+          "",
+          "أكو أشخاص يكون جمالهم بالصورة،",
+          "وأكو أشخاص حضورهم نفسه يكون جميل.",
+          "",
+          "وإنتِ من النوع الثاني."
+        ]
+      },
+
+      {
+        title:"الأثر اللي تتركينه",
+
+        text:[
+          "والأغرب إن تأثيرچ ما ينتهي من ينتهي الحچي.",
+          "",
+          "مرات نخلص سوالفنا،",
+          "وبعدها أبقى أتذكر كلمة گلتِيها،",
+          "أو ضحكة،",
+          "أو موقف صغير...",
+          "",
+          "وأبتسم وحدي.",
+          "",
+          "يمكن إنتِ ما تعرفين،",
+          "بس بعض التفاصيل اللي تسوينها بعفوية",
+          "تكدر تغير مزاج يوم كامل."
+        ]
+      },
+
+      {
+        title:"ولهذا أحبچ بهالتفاصيل 🤍",
+
+        text:[
+          "فإذا يوم سألتي:",
+          "«شنو أكثر شي يعجبك بيّ؟»",
+          "",
+          "ما راح أگدر أختار شي واحد.",
+          "",
+          "إذا گلت جمالچ، أكون نسيت صوتچ.",
+          "وإذا گلت صوتچ، أكون نسيت ضحكتچ.",
+          "وإذا گلت عيونچ، أكون نسيت حضورچ.",
+          "",
+          "لأن اللي يعجبني بيچ مو تفصيلة وحدة...",
+          "",
+          "يعجبني كل هالتفاصيل من تجتمع بشخص واحد.",
+          "",
+          "ويمكن هذا أجمل شي...",
+          "",
+          "إن كل ما أعرفچ أكثر،",
+          "أكتشف سبب جديد يخليني أحب وجودچ أكثر. 🤍"
+        ],
+
+        final:true
+      }
+
+    ]
+
   }
 
 };
@@ -1679,15 +2116,22 @@ function openReader(storyName){
         document.createElement("div");
 
 
-      pageEl.className =
-        "reader-page " +
-        (
-          storyName === "one"
-          ? "one-page"
-          : storyName === "two"
-          ? "two-page"
-          : "three-page"
-        );
+      let pageClass = "reader-page ";
+
+      if(storyName === "one"){
+        pageClass += "one-page";
+      }
+      else if(storyName === "two"){
+        pageClass += "two-page";
+      }
+      else if(storyName === "three"){
+        pageClass += "three-page";
+      }
+      else{
+        pageClass += "four-page";
+      }
+
+      pageEl.className = pageClass;
 
 
       /* ============================================
@@ -1880,7 +2324,7 @@ function openReader(storyName){
          STORY THREE
       ============================================ */
 
-      else{
+      else if(storyName === "three"){
 
         pageEl.innerHTML = `
 
@@ -1923,6 +2367,62 @@ function openReader(storyName){
             page.final
             ?
             `<div class="three-heart">♡</div>`
+            :
+            ""
+          }
+
+        `;
+
+      }
+
+
+      /* ============================================
+         STORY FOUR — NEW
+      ============================================ */
+
+      else{
+
+        pageEl.innerHTML = `
+
+          <div class="four-number">
+
+            ${String(index+1).padStart(2,"0")}
+
+            /
+
+            ${currentStory.pages.length}
+
+          </div>
+
+
+          <div class="four-title">
+            ${page.title}
+          </div>
+
+
+          <div class="four-line"></div>
+
+
+          <div class="four-text">
+
+            ${
+              page.text.map(
+                line =>
+                line === ""
+                ?
+                `<div style="height:12px"></div>`
+                :
+                `<div>${line}</div>`
+              ).join("")
+            }
+
+          </div>
+
+
+          ${
+            page.final
+            ?
+            `<div class="four-heart">♡</div>`
             :
             ""
           }
